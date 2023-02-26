@@ -1,0 +1,43 @@
+p = Products('Shirt', 'Colorful clothes', 123, (123 * 0.5), 'pr-1.webp', 1)
+
+
+
+
+# class Favorite(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     price = db.Column(db.Float())
+#     img_url = db.Column(db.String(255), index=True)
+#     products_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+
+
+
+
+
+# favorites = db.Table('favorites',
+#         db.Column('colors_id', db.Integer, db.ForeignKey('colors.id'), primary_key= True),
+#         db.Column('sizes_id', db.Integer, db.ForeignKey('sizes.id'), primary_key=True))
+
+
+
+
+# favorites = db.relationship('Colors', secondary=favorites, lazy='subquery', backref=db.backref())
+
+
+
+class Favorite(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    
+
+
+    def __init__(self, colors_id, size_id):
+        self.colors_id = colors_id
+        self.size_id = size_id
+
+
+    def __repr__(self):
+        return self.colors_id
+
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
