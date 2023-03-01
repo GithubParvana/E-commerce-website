@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash
-from flask_admin import Admin
+
 
 app = Flask(__name__)
 
@@ -17,6 +17,13 @@ app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 from extensions import *
 from controllers import *
 from models import *
+
+admin.add_view(ModelView(Products, db.session))
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Contacts, db.session))
+admin.add_view(ModelView(Categories, db.session))
+admin.add_view(ModelView(Subcategory, db.session))
+admin.add_view(ModelView(Reviews, db.session))
 
 
 

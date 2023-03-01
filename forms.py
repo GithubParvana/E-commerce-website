@@ -19,7 +19,6 @@ class LoginForm(FlaskForm):
 
 
 
-
 class ReviewForm(FlaskForm):
     message = TextAreaField('message', validators=[DataRequired()])
     user_id =IntegerField('user_id')
@@ -36,10 +35,10 @@ class ContactsForm(FlaskForm):
 
 
 
-class FavoriteForm(FlaskForm):
-    image = StringField('image', validators=[DataRequired()])
-    price = IntegerField('price', validators=[DataRequired()])
-    products_name = StringField('name', validators=[DataRequired()])
+# class FavoriteForm(FlaskForm):
+#     image = StringField('image', validators=[DataRequired()])
+#     price = IntegerField('price', validators=[DataRequired()])
+#     products_name = StringField('name', validators=[DataRequired()])
 
 
 
@@ -50,7 +49,14 @@ class RemoveForm(FlaskForm):
     
 
 
+class NewsletterForm(FlaskForm):
+    name = StringField('name', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired()])
 
-class SearchForm(FlaskForm):
+
+class SizeForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
 
+
+class ColorForm(FlaskForm):
+    name = StringField('name', validators=[DataRequired()])

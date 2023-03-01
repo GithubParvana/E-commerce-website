@@ -1,9 +1,10 @@
 from extensions import db, login_manager
 from app import app
-from flask_login import UserMixin
+from flask_login import UserMixin, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
-
+from flask_security import RoleMixin
+from sqlalchemy.schema import UniqueConstraint
 
 
 
@@ -18,12 +19,15 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100), nullable = False)
     email = db.Column(db.String(100), nullable = False, unique=True)
     password = db.Column(db.String(255), nullable = False)
+    is_superuser = db.Column(db.Boolean, nullable=False)
+    # roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users'), lazy='dynamic')
 
 
-    def __init__(self, name, email, password):
+    def __init__(self, name, email, password, is_superuser=False):
         self.name = name
         self.email = email
         self.password = password
+        self.is_superuser = is_superuser
 
 
     def check_password(self, password):
@@ -39,6 +43,20 @@ class User(UserMixin, db.Model):
         db.session.commit()
 
         
+
+
+
+# class Role(db.Model, RoleMixin):
+#     id = db.Column(db.Integer(), primary_key=True)
+#     name = db.Column(db.String(100), nullable = False)
+
+
+
+
+
+
+
+
 
 
 # review form ucun
@@ -75,6 +93,12 @@ class Reviews(db.Model):
 class Categories(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(255), nullable = False)
+    category_ = db.relationship('Products', backref = 'categories')
+
+
+    @classmethod
+    def count_cat(cls):
+        return cls.query.count()
     
 
     def __init__(self, name):
@@ -94,13 +118,11 @@ class Categories(db.Model):
 class Subcategory(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(255), nullable = False)
-    category_id = db.Column(db.ForeignKey('categories.id'))
+    subcategory_ = db.relationship('Products', backref = 'subcategory')
+    
 
-
-    def __init__(self, name, category_id):
-        self.name = name
-        self.category_id = category_id
-        
+    def __init__(self, name): 
+        self.name = name    
 
 
     def __repr__(self):
@@ -119,6 +141,12 @@ class Colors(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     color = db.Column(db.String(100), nullable = False)
     colors_ = db.relationship('Products', backref = 'colors')
+
+
+    @classmethod
+    def count_color(cls):
+        return cls.query.count()
+
 
     def __init__(self, color):
         self.color = color
@@ -140,6 +168,11 @@ class Sizes(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     size = db.Column(db.String(100), nullable = False)
     sizes_ = db.relationship('Products', backref = 'sizes')
+
+
+    @classmethod
+    def count_size(cls):
+        return cls.query.count()
     
 
     def __init__(self, size):
@@ -161,11 +194,20 @@ class Sizes(db.Model):
 
 class Favorite(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    products_id = db.Column(db.ForeignKey('products.id'), nullable = True)
+    products_id = db.Column(db.ForeignKey('products.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    product = db.relationship('Products', backref=db.backref('favorite', lazy=True))
+    __table_args__ = (UniqueConstraint(user_id, products_id), )
+
+
+    @classmethod
+    def count_fave(cls):
+        return cls.query.count()
     
 
-    def __init__(self):
-        self.products_id = products_id
+    def __init__(self, products_id, user_id):
+        self.products_id = products_id,
+        self.user_id = user_id
         
 
 
@@ -176,31 +218,38 @@ class Favorite(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+    
 
 
 
 
-
-class Remove(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    favorites_id = db.Column(db.ForeignKey('favorite.id'), nullable = True)
+# class Remove(db.Model):
+#     id = db.Column(db.Integer(), primary_key=True)
+#     favorites_id = db.Column(db.ForeignKey('favorite.id'), nullable = True)
     
 
     
-    def __init__(self, image, price, products_name):
-        self.favorites_id = favorites_id
+#     def __init__(self, favorites_id):
+#         self.favorites_id = favorites_id
         
 
-
-    def __repr__(self):
-        return self.favorites_id
-
-
-    def save(self):
-        db.session.delete(self)
-        db.session.commit()
+#     def __repr__(self):
+#         return self.favorites_id
 
 
+#     def save(self):
+#         db.session.delete(self)
+#         db.session.commit()
+
+
+
+
+# roles_users = db.Table('roles_users',
+#                        db.Column('user_id', db.Integer,
+#                        db.ForeignKey('user.id')),
+#                        db.Column('role_id', db.Integer,
+#                        db.ForeignKey('roles.id'))
+# )
 
 
 
@@ -215,12 +264,12 @@ class Products(db.Model):
     category_id = db.Column(db.Integer(), db.ForeignKey('categories.id'), nullable=False)
     sizes_id = db.Column(db.Integer(), db.ForeignKey('sizes.id'), nullable=False)
     colors_id = db.Column(db.Integer(), db.ForeignKey('colors.id'), nullable=False)
+    subcategory_id = db.Column(db.Integer(), db.ForeignKey('subcategory.id'), nullable=False)
     
-    
 
 
 
-    def __init__(self, name, description, price, sale_price, img_url, category_id, sizes_id, colors_id):
+    def __init__(self, name, description, price, sale_price, img_url, category_id, sizes_id, colors_id, subcategory_id):
         self.name = name
         self.description = description
         self.price = price
@@ -229,6 +278,7 @@ class Products(db.Model):
         self.category_id = category_id
         self.sizes_id = sizes_id
         self.colors_id = colors_id
+        self.subcategory_id = subcategory_id
         
         
 
@@ -246,7 +296,6 @@ class Products(db.Model):
 
 
 
-    
 
 # contacts query contact page ucun
 

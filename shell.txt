@@ -41,3 +41,116 @@ class Favorite(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+
+
+
+Shirt
+Sweater
+Short
+Short jeans	
+Jacket and skirt	
+Shirt and trousers	
+Shirt and short	
+Coat
+Shirt and Short	
+
+Colorful clothes for people. Our products make you feel comfortable! :)	
+
+pr-1.webp
+pr-2.webp
+pr-3.webp	
+pr-4.webp
+pr-5.webp	
+pr-6.webp	
+pr-7.webp	
+pr-8.webp	
+pr-9.webp	
+
+
+
+
+
+<form method="POST">
+                        <div class="custom-control d-flex align-items-center justify-content-between mb-3">
+                            
+                            <label>All Color</label>
+                            <!-- <span class="badge border font-weight-normal">{{product_count}}</span> -->
+                        </div>
+                        {% for color in colors %}
+                        <div class="custom-control d-flex align-items-center justify-content-between mb-3">           
+                            <a href="?color={{color}}">{{color}}</a>
+                            
+                            
+                        </div>
+                        {% endfor %}
+                    </form>
+
+
+
+
+
+class FavoriteForm(FlaskForm):
+    image = StringField('image', validators=[DataRequired()])
+    price = IntegerField('price', validators=[DataRequired()])
+    products_name = StringField('name', validators=[DataRequired()])
+
+
+
+
+# deatil.html de yazmaq;
+
+form = FavoriteForm
+if request.method == 'POST':
+   form =  FavoriteForm(request.form)
+   if form.validate_on_submit():
+       fav = FavoriteForm(
+          image = form.image.data,
+          price = form.price.data,
+          products_name = form.products_name.data
+   )
+   fav.save()
+   form = FavoriteForm()
+return redirect('favorites.html')
+return render_template('detail.html', form=form)
+
+
+
+
+# remove hisse ucun;
+
+model'deki Favorite model;
+
+class Favorite(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    image = db.Column(db.String(100), nullable=False)
+    product_name = db.Column(db.String(255), nullable=False)
+    price = db.Column(db.Float(), nullable=False)
+    
+
+    def __init__(self):
+        self.image = image
+        self.product_name = product_name
+        self.price = price
+        
+
+
+    def __repr__(self):
+        return self.image
+
+
+    def save(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+
+# controllers.py da;
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete(id):
+    if request.method == 'POST':
+    db.session.delete(name)
+    db.session.commit()
+    flash(f'The product {favorite.name} was deleted from your database', 'warning')
+    return redirect(url_for('favorite'))
