@@ -17,6 +17,8 @@ def base_page():
 @app.route('/product', methods=['GET', 'POST'])  # mehsul sehifesi;
 @login_required
 def product_page():
+    favorites_count = Favorite.query.filter_by(
+        user_id=current_user.id).count()
     products = Products.query.all()
     cat = Categories.query.all()
     subcategories = Subcategory.query.all()
@@ -65,7 +67,7 @@ def product_page():
             )
             newsletter.save()
         redirect(url_for('product_page'))
-    return render_template('shop.html', cat = cat, products=products, subcategories = subcategories, form=form, sizes=sizes, colors=colors, product_count=product_count)
+    return render_template('shop.html', cat = cat, products=products, subcategories = subcategories, form=form, sizes=sizes, colors=colors, product_count=product_count, favorites_count=favorites_count)
 
 
 
