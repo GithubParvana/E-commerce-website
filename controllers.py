@@ -126,9 +126,12 @@ def add_favorite(products_id):
         products_id=products_id,
         user_id=current_user.id
     )
+    if Favorite.query.filter_by(products_id=products_id, user_id=current_user.id).first() is not None:
+        flash('Already added, thank you :) ')
+    else:
+        db.session.add(favorite)
+        db.session.commit()   
     
-    db.session.add(favorite)
-    db.session.commit()
     # redirect('favorites')
     return favorites()
     

@@ -202,6 +202,15 @@
                 <div class="d-flex align-items-center mb-4 pt-2">
                     <a href="{{ url_for('add_favorite', products_id=products.id) }}">
                     <button class="btn btn-primary px-3"><i class="fa fa-heart mr-1" aria-hidden="true"></i>Add To Favorites</button>
+                    {% with messages = get_flashed_messages() %}
+                                        {% if messages %}
+                                        <ul class=flashes>
+                                        {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                    {% endwith %}
 
                     </a>
                 </div>
