@@ -252,6 +252,3 @@ def login_page():
 
 
 
-
-
-

@@ -57,8 +57,6 @@ class User(UserMixin, db.Model):
 
 
 
-
-
 # review form ucun
 
 class Reviews(db.Model):
