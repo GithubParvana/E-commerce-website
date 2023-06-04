@@ -14,6 +14,16 @@ Built with
 
 
 
+DataBase Design:
+
+
+
+
+
+![final-backend-project](https://github.com/GithubParvana/E-commerce-website/assets/46266509/e5f52a89-c282-4090-9ae4-e175b4aa14a5)
+
+
+
 
 
 Some functionalities:
