@@ -1,3 +1,11 @@
-# Beginner final layihə
+E-commerce website
 
-Verilmiş [texniki tapşırıq](./technical-requirements-document.pdf) faylından və [frontend fayllarından](./_frontend) istifadə edərək final layihəni yazmaq tələb olunur.
+
+Built with 
+
+- Flask Framework
+- Python 3.8
+- MY SQL
+- HTML
+- CSS
+- JavaScript
