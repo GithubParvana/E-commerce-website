@@ -9,3 +9,18 @@ Built with
 - HTML
 - CSS
 - JavaScript
+
+
+
+Some functionalities:
+
+- Add and Filter features
+- Search and browse
+- Your Favorites
+- Customer support
+- Authentication \ Autherization
+
+
+
+Example pages:
+
