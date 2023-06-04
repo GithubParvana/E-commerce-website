@@ -21,6 +21,7 @@ p = Products('Shirt', 'Colorful clothes', 123, (123 * 0.5), 'pr-1.webp', 1)
 
 
 
+
 # favorites = db.relationship('Colors', secondary=favorites, lazy='subquery', backref=db.backref())
 
 

@@ -29,6 +29,7 @@ admin.add_view(ModelView(Reviews, db.session))
 
 
 
+
 if __name__ == '__main__':
     app.init_app(db)
     app.init_app(migrate)

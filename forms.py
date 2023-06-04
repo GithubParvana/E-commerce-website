@@ -61,3 +61,4 @@ class SizeForm(FlaskForm):
 class ColorForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
     
+    
